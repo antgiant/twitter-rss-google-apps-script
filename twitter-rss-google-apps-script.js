@@ -80,9 +80,11 @@ function doGet(e) {
             description = "Twitter updates from " + q + ".";
             break;
         default:
-            feed = "https://api.twitter.com/1.1/statuses/user_timeline.json";
-            permalink = "https://twitter.com";
-            description = "Twitter timeline.";
+            feed = "https://api.twitter.com/1.1/statuses/home_timeline.json";
+            description = "Twitter Home timeline.";
+            a = "Home Timeline";
+            q = "antgiant";
+            permalink = "https://twitter.com/"+q;
             break;
     }
 
