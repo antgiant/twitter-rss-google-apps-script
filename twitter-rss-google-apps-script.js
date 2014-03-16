@@ -153,6 +153,7 @@ function jsonToRss(feed, permalink, description, type, key) {
                         var favs = tweet.favorite_count;
                         var date = new Date(tweet.created_at);
                         var enclosures = "";
+                        var embeds = "";
                                            
                          //Parse Tweet for Display
                       if (typeof tweet.entities.hashtags != 'undefined') {
@@ -173,7 +174,12 @@ function jsonToRss(feed, permalink, description, type, key) {
                       if (typeof tweet.entities.urls != 'undefined') {
                         for (j = 0; j < tweet.entities.urls.length; j++) {
                           display_tweet = display_tweet.replace(tweet.entities.urls[j].url, "<a href='"+tweet.entities.urls[j].url+"' title='"+tweet.entities.urls[j].expanded_url+"'>"+tweet.entities.urls[j].display_url+"</a>");
-                        }
+                          if (tweet.entities.urls[j].expanded_url.substring(0,16) == "http://youtu.be/") {
+                            embeds += '<br>\n<iframe width="560" height="315" src="//www.youtube.com/embed/'+tweet.entities.urls[j].expanded_url.substring(16)+'" frameborder="0" allowfullscreen></iframe>\n';
+                          }
+                          if (tweet.entities.urls[j].expanded_url.substring(0,23) == "http://instagram.com/p/") {
+                            embeds += '<br>\n<iframe width="612" height="710" src="//instagram.com/p/'+tweet.entities.urls[j].expanded_url.substring(23)+'/embed/" scrolling="no" allowtransparency="true"></iframe>\n';
+                          }                        }
                       }
                       if (typeof tweet.entities.user_mentions != 'undefined') {
                         for (j = 0; j < tweet.entities.user_mentions.length; j++) {
@@ -197,6 +203,7 @@ function jsonToRss(feed, permalink, description, type, key) {
                                "<td><strong>"+sender_name+"</strong> <a href='https://twitter.com/" + sender + "'>@"+sender+"</a> <br>\n";
                         rss += display_tweet + "<br>\n";
                         rss += retweets+" Retweets | "+favs+" Favorites</td></tr></table>\n";
+                        rss += embeds;
                         rss += "]]></description>\n";
                         rss += enclosures;
                         rss += "<comments>https://twitter.com/" + sender + "/statuses/" + tweets[i].id_str + "#descendants</comments>\n";
