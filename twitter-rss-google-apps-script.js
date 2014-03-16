@@ -50,8 +50,8 @@ function initialize(key, secret) {
 }
 
 function doGet(e) {
-    var a = e.parameter.action;
-    var q = e.parameter.q;
+    var a ;//= e.parameter.action;
+    var q ;//= e.parameter.q;
 
     var feed;
     var permalink;
