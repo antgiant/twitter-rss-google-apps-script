@@ -1,7 +1,7 @@
 /**
- * Twitter RSS Feeds - Google Apps Script
+ * Twitter Atom Feeds - Google Apps Script
  *
- * Google Apps Script to use Twitter API v1.1 to create RSS feeds of
+ * Google Apps Script to use Twitter API v1.1 to create Atom feeds of
  * user's timeline, search results, user's favorites, or Twitter
  * Lists.
  *
@@ -28,7 +28,7 @@ function initialize(key, secret) {
 
         var msg = "";
 
-        msg += "Sample RSS Feeds for Twitter\n";
+        msg += "Sample Atom Feeds for Twitter\n";
         msg += "============================";
 
         msg += "\n\nTwitter Timeline of user @labnol";
@@ -44,7 +44,7 @@ function initialize(key, secret) {
         msg += "\n" + url + "?action=search&q=new+york";
 
         msg += "\n\nYou should replace the value of the 'q' parameter in the URLs to the one you want.";
-        msg += "\n\nFor help, please refer to https://github.com/MitchellMcKenna/twitter-rss-google-apps-script";
+        msg += "\n\nFor help, please refer to https://github.com/MitchellMcKenna/twitter-atom-google-apps-script";
 
     }
 }
@@ -92,20 +92,20 @@ function doGet(e) {
 
     var cache = CacheService.getPublicCache();
 
-    var rss   ;//= cache.get(id);
+    var atom   ;//= cache.get(id);
 
-    if (!rss) {
-        rss = jsonToRss(feed, permalink, description, a, q);
+    if (!atom) {
+        atom = jsonToatom(feed, permalink, description, a, q);
 
-        cache.put(id, rss, 900);
+        cache.put(id, atom, 900);
     }
 
-    return ContentService.createTextOutput(rss)
-        .setMimeType(ContentService.MimeType.RSS);
+    return ContentService.createTextOutput(atom)
+        .setMimeType(ContentService.MimeType.ATOM);
 }
 
 
-function jsonToRss(feed, permalink, description, type, key) {
+function jsonToatom(feed, permalink, description, type, key) {
     oAuth();
 
     var options =
@@ -128,18 +128,18 @@ function jsonToRss(feed, permalink, description, type, key) {
             if (tweets) {
                 var len = tweets.length;
 
-                var rss = "";
+                var atom = "";
 
                 if (len) {
                     var date_now = new Date();
-                    rss =  '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n';
-                    rss += '  <feed xmlns="http://www.w3.org/2005/Atom">\n';
-                    rss += "    <id>" + ScriptApp.getService().getUrl() + "</id>\n";
-                    rss += '    <link href="'+ScriptApp.getService().getUrl()+'" rel="self" type="application/atom+xml" />\n';
-                    rss += '    <title>Twitter ' + type + ': ' + key + '</title>\n';
-                    rss += "    <updated>"+date_now.toRFC3339UTCString()+"</updated>\n";
-                    rss += '    <link rel="alternate" type="text/html" href="' + permalink + '" />\n';
-                    rss += '    <subtitle>' + description + '</subtitle>\n';
+                    atom =  '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n';
+                    atom += '  <feed xmlns="http://www.w3.org/2005/Atom">\n';
+                    atom += "    <id>" + ScriptApp.getService().getUrl() + "</id>\n";
+                    atom += '    <link href="'+ScriptApp.getService().getUrl()+'" rel="self" type="application/atom+xml" />\n';
+                    atom += '    <title>Twitter ' + type + ': ' + key + '</title>\n';
+                    atom += "    <updated>"+date_now.toRFC3339UTCString()+"</updated>\n";
+                    atom += '    <link rel="alternate" type="text/html" href="' + permalink + '" />\n';
+                    atom += '    <subtitle>' + description + '</subtitle>\n';
 
                     for (var i = 0; i < len; i++) {
                       
@@ -189,41 +189,41 @@ function jsonToRss(feed, permalink, description, type, key) {
                         }
                       }
                       
-                        rss += "  <entry>\n";
-                        rss += "    <title>" + sender + ": " + original_tweet + "</title>\n";
-                        rss += '    <id>https://twitter.com/' + sender + '/statuses/' + tweets[i].id_str + '</id>\n';
-                        rss += '    <link rel="alternate" type="text/html" href="https://twitter.com/' + sender + '/statuses/' + tweets[i].id_str + '" />\n';
-                        rss += "    <published>" + date.toRFC3339UTCString() + "</published>\n";
-                        rss += '    <updated>' + date_now.toRFC3339UTCString() + '</updated>\n';
-                        rss += '    <author>\n';
-                        rss += '      <name>'+sender_name+' (@'+sender+')</name>\n';
-                        rss += '      <uri>https://twitter.com/' + sender + '</uri>\n';
-                        rss += '    </author>\n';
-                        rss += '    <content type="html">\n';
-                        rss += '      <![CDATA[\n';
-                        rss += '        <table>\n';
+                        atom += "  <entry>\n";
+                        atom += "    <title>" + sender + ": " + original_tweet + "</title>\n";
+                        atom += '    <id>https://twitter.com/' + sender + '/statuses/' + tweets[i].id_str + '</id>\n';
+                        atom += '    <link rel="alternate" type="text/html" href="https://twitter.com/' + sender + '/statuses/' + tweets[i].id_str + '" />\n';
+                        atom += "    <published>" + date.toRFC3339UTCString() + "</published>\n";
+                        atom += '    <updated>' + date_now.toRFC3339UTCString() + '</updated>\n';
+                        atom += '    <author>\n';
+                        atom += '      <name>'+sender_name+' (@'+sender+')</name>\n';
+                        atom += '      <uri>https://twitter.com/' + sender + '</uri>\n';
+                        atom += '    </author>\n';
+                        atom += '    <content type="html">\n';
+                        atom += '      <![CDATA[\n';
+                        atom += '        <table>\n';
                         if (typeof tweets[i].retweeted_status != 'undefined') {
-                          rss += "          <tr>\n";
-                          rss += "            <td colspan='2'><a href='https://twitter.com/" + tweets[i].user.screen_name + "'>" + tweets[i].user.name + " (@" + tweets[i].user.screen_name + ") Retweeted</a></td>\n";
-                          rss += "          </tr>\n";
+                          atom += "          <tr>\n";
+                          atom += "            <td colspan='2'><a href='https://twitter.com/" + tweets[i].user.screen_name + "'>" + tweets[i].user.name + " (@" + tweets[i].user.screen_name + ") Retweeted</a></td>\n";
+                          atom += "          </tr>\n";
                         }
-                        rss += "          <tr>\n";
-                        rss += "            <td><a href='https://twitter.com/" + sender + "'><img src='"+senderpic+"'></a></td>\n"+
+                        atom += "          <tr>\n";
+                        atom += "            <td><a href='https://twitter.com/" + sender + "'><img src='"+senderpic+"'></a></td>\n"+
                                "            <td><strong>"+sender_name+"</strong> <a href='https://twitter.com/" + sender + "'>@"+sender+"</a> <br>\n";
-                        rss += "                " + display_tweet + "                <br>\n";
-                        rss += "                " + retweets+" Retweets | "+favs+" Favorites</td>\n";
-                        rss += "          </tr>\n";
-                        rss += "        </table>\n";
-                        rss += "                " + images;
-                        rss += "                " + embeds;
-                        rss += "      ]]>\n";
-                        rss += "    </content>\n";
-                        rss += "  </entry>\n";
+                        atom += "                " + display_tweet + "                <br>\n";
+                        atom += "                " + retweets+" Retweets | "+favs+" Favorites</td>\n";
+                        atom += "          </tr>\n";
+                        atom += "        </table>\n";
+                        atom += "                " + images;
+                        atom += "                " + embeds;
+                        atom += "      ]]>\n";
+                        atom += "    </content>\n";
+                        atom += "  </entry>\n";
                     }
 
-                    rss += "</feed>";
+                    atom += "</feed>";
 
-                    return rss;
+                    return atom;
                 }
             }
         }
