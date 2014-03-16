@@ -46,7 +46,6 @@ function initialize(key, secret) {
         msg += "\n\nYou should replace the value of the 'q' parameter in the URLs to the one you want.";
         msg += "\n\nFor help, please refer to https://github.com/MitchellMcKenna/twitter-rss-google-apps-script";
 
-        MailApp.sendEmail(Session.getActiveUser().getEmail(), "Twitter RSS Feeds", msg);
     }
 }
 
