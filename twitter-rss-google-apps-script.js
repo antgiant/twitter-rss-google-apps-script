@@ -90,7 +90,7 @@ function doGet(e) {
 
     var cache = CacheService.getPublicCache();
 
-    var rss   = cache.get(id);
+    var rss   ;//= cache.get(id);
 
     if (!rss) {
         rss = jsonToRss(feed, permalink, description, a, q);
