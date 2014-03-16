@@ -267,3 +267,55 @@ function oAuth() {
     oauthConfig.setConsumerKey(ScriptProperties.getProperty("TWITTER_CONSUMER_KEY"));
     oauthConfig.setConsumerSecret(ScriptProperties.getProperty("TWITTER_CONSUMER_SECRET"));
 }
+
+
+/*
+ * rfc3339date.js version 0.1.3
+ *
+ * Adds ISO 8601 / RFC 3339 date parsing to the Javascript Date object.
+ * Usage:
+ *   var d = Date.parseISO8601( "2010-07-20T15:00:00Z" );
+ *   var d = Date.parse( "2010-07-20T15:00:00Z" );
+ * Tested for compatibilty/coexistence with:
+ *   - jQuery [http://jquery.com]
+ *   - datejs [http://www.datejs.com/]
+ *
+ * Copyright (c) 2010 Paul GALLAGHER http://tardate.com
+ * Licensed under the MIT license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *
+ */
+
+/*
+ * Number.prototype.toPaddedString
+ * Number instance method used to left-pad numbers to the specified length
+ * Used by the Date.prototype.toRFC3339XXX methods
+ */
+Number.prototype.toPaddedString = function(len , fillchar) {
+  var result = this.toString();
+  if(typeof(fillchar) == 'undefined'){ fillchar = '0' };
+  while(result.length < len){ result = fillchar + result; };
+  return result;
+}
+
+/*
+ * Date.prototype.toRFC3339UTCString
+ * Date instance method to format the date as ISO8601 / RFC 3339 string (in UTC format).
+ * Usage: var d = new Date().toRFC3339UTCString();
+ *              => "2010-07-25T11:51:31.427Z"
+ * Parameters:
+ *  supressFormating : if supplied and 'true', will force to remove date/time separators
+ *  supressMillis : if supplied and 'true', will force not to include milliseconds
+ */
+Date.prototype.toRFC3339UTCString = function(supressFormating , supressMillis){
+  var dSep = ( supressFormating ? '' : '-' );
+  var tSep = ( supressFormating ? '' : ':' );
+  var result = this.getUTCFullYear().toString();
+  result += dSep + (this.getUTCMonth() + 1).toPaddedString(2);
+  result += dSep + this.getUTCDate().toPaddedString(2);
+  result += 'T' + this.getUTCHours().toPaddedString(2);
+  result += tSep + this.getUTCMinutes().toPaddedString(2);
+  result += tSep + this.getUTCSeconds().toPaddedString(2);
+  if((!supressMillis)&&(this.getUTCMilliseconds()>0)) result += '.' + this.getUTCMilliseconds().toPaddedString(3);
+  return result + 'Z';
+}
