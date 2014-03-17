@@ -1,10 +1,10 @@
-# Twitter RSS Feeds - Google Apps Script
+# Twitter Atom Feeds - Google Apps Script
 
-Google Apps Script to use Twitter API v1.1 to create RSS feeds of  user's timeline, search results, user's favorites, or Twitter Lists. This script is based on the one by Amit Agarwal posted on [labnol.org](http://www.labnol.org/internet/twitter-rss-feeds/27931/).
+Google Apps Script to use Twitter API v1.1 to create Atom feeds of  user's timeline, search results, user's favorites, or Twitter Lists. This script is based on the one by Amit Agarwal posted on [labnol.org](http://www.labnol.org/internet/twitter-Atom-feeds/27931/).
 
-Twitter API 1.0 has been deprecated, and as such RSS feeds are no longer available. With API v1.1, all requests to the Twitter API must now be authenticated with OAuth. Using Google Apps Scripts, anyone can easily setup a script to do the oAuth and output an RSS feed without having to host the code themselves.
+Twitter API 1.0 has been deprecated, and as such Atom feeds are no longer available. With API v1.1, all requests to the Twitter API must now be authenticated with OAuth. Using Google Apps Scripts, anyone can easily setup a script to do the oAuth and output an Atom feed without having to host the code themselves.
 
-## How to Create RSS Feeds for Twitter API 1.1
+## How to Create Atom Feeds for Twitter API 1.1
 
 ### 1. Setup a Twitter App
 
@@ -12,11 +12,11 @@ Twitter API 1.0 has been deprecated, and as such RSS feeds are no longer availab
 * Take note of the Consumer Key and Consumer Secret Key.
 
 ### 2. Configure your Google Script
-* [Click here](https://script.google.com/d/1xrMvosTNNWsBH5aJJjLcqEGMFCC4tmNsN-gz9mjKFbT74bIKBKVu-Z5z/edit?newcopy=true) to copy the Twitter RSS script into your Google Drive. 
+* [Click here](https://script.google.com/d/1xrMvosTNNWsBH5aJJjLcqEGMFCC4tmNsN-gz9mjKFbT74bIKBKVu-Z5z/edit?newcopy=true) to copy the Twitter Atom script into your Google Drive. 
 * Replace the placeholders for Twitter Consumer key and Secret in the start() function.
 * Go to *File* -> *Manage Version* and choose *Save New Version*.
 * Go to *Publish* -> *Deploy as Web App* and choose *Anyone, even anonymous* under Who has Access. Click the Deploy button.
 
-### 3. Deploy the Twitter RSS Feed generator
+### 3. Deploy the Twitter Atom Feed generator
 * Go to *Run* -> *Start* and an oAuth window will open to grant the twitter app the necessary permissions.
-* You’ll get an email to your google account's email address with links to some sample RSS feeds.
+* You’ll get an email to your google account's email address with links to some sample Atom feeds.
