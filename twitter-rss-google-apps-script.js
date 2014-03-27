@@ -212,27 +212,21 @@ function jsonToatom(feed, permalink, description, type, key) {
                         atom += '    </author>\n';
                         atom += '    <content type="html">\n';
                         atom += '      <![CDATA[\n';
-                        atom += '        <div>\n';
+                        atom += '        <table>\n';
                         if (typeof tweets[i].retweeted_status != 'undefined') {
-                          atom += "          <div>\n";
-                          atom += "            <p><a href='https://twitter.com/" + tweets[i].user.screen_name + "'>" + tweets[i].user.name + " (@" + tweets[i].user.screen_name + ") Retweeted</a></p>\n";
-                          atom += "          </div>\n";
+                          atom += "          <tr>\n";
+                          atom += "            <td colspan='2'><a href='https://twitter.com/" + tweets[i].user.screen_name + "'>" + tweets[i].user.name + " (@" + tweets[i].user.screen_name + ") Retweeted</a></td>\n";
+                          atom += "          </tr>\n";
                         }
-                        atom += "          <div style='overflow: auto;float: left'>\n";
-                        atom += "            <div style='float: right'>\n";
-                        atom += "              <p><strong>"+sender_name+"</strong> <a href='https://twitter.com/" + sender + "'>@"+sender+"</a> <br>\n";
+                        atom += "          <tr>\n";
+                        atom += "            <td><a href='https://twitter.com/" + sender + "'><img src='"+senderpic+"'></a></td>\n"+
+                               "            <td><strong>"+sender_name+"</strong> <a href='https://twitter.com/" + sender + "'>@"+sender+"</a> <br>\n";
                         atom += "                " + display_tweet + "                <br>\n";
-                        atom += "                " + retweets+" Retweets | "+favs+" Favorites\n";
-                        atom += "              </p>";
-                        atom += "              <br style='clear: both'>\n";
+                        atom += "                " + retweets+" Retweets | "+favs+" Favorites</td>\n";
+                        atom += "          </tr>\n";
+                        atom += "        </table>\n";
                         atom += "                " + images;
                         atom += "                " + embeds;
-                        atom += "            </div>\n";
-                        atom += "            <div style='float: left'>\n";
-                        atom += "              <a href='https://twitter.com/" + sender + "'><img src='"+senderpic+"'></a>\n";
-                        atom += "            </div>\n";
-                        atom += "          </div>\n";
-                        atom += "        </div>\n";
                         atom += "      ]]>\n";
                         atom += "    </content>\n";
                         atom += "  </entry>\n";
