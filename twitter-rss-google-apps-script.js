@@ -158,6 +158,7 @@ function jsonToatom(feed, permalink, description, type, key) {
                         date = new Date(tweet.created_at);
                         var images = "";
                         var embeds = "";
+                        var unshortened = "";
                                            
                          //Parse Tweet for Display
                       if (typeof tweet.entities.hashtags != 'undefined') {
@@ -174,7 +175,17 @@ function jsonToatom(feed, permalink, description, type, key) {
                       }
                       if (typeof tweet.entities.urls != 'undefined') {
                         for (j = 0; j < tweet.entities.urls.length; j++) {
-                          display_tweet = display_tweet.replace(tweet.entities.urls[j].url, "<a href='"+tweet.entities.urls[j].url+"' title='"+tweet.entities.urls[j].expanded_url+"'>"+tweet.entities.urls[j].display_url+"</a>");
+                          var z = 0;
+                          var temp = tweet.entities.urls[j].display_url;
+                          unshortened = UrlFetchApp.fetch(tweet.entities.urls[j].expanded_url, {"followRedirects":false});
+                          unshortened = unshortened.getHeaders();
+                          while (typeof unshortened["Location"] != 'undefined' && z++ < 15) {
+                            temp = unshortened["Location"];
+                            unshortened = UrlFetchApp.fetch(unshortened["Location"], {"followRedirects":false});
+                            unshortened = unshortened.getHeaders();
+                          }
+                          unshortened = temp.replace( new RegExp("[^/]*//",""),"");
+                          display_tweet = display_tweet.replace(tweet.entities.urls[j].url, "<a href='"+tweet.entities.urls[j].url+"' title='"+tweet.entities.urls[j].expanded_url+"'>"+unshortened+"</a>");
                           if (tweet.entities.urls[j].expanded_url.substring(0,16) == "http://youtu.be/") {
                             embeds += '<br>\n<iframe width="560" height="315" src="//www.youtube.com/embed/'+tweet.entities.urls[j].expanded_url.substring(16)+'" frameborder="0" allowfullscreen></iframe>\n';
                           }
