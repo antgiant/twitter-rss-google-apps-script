@@ -200,6 +200,9 @@ function jsonToatom(feed, permalink, description, type, key) {
                           if (tweet.entities.urls[j].expanded_url.substring(0,23) == "http://instagram.com/p/") {
                             embeds += '<br>\n<iframe width="612" height="710" src="//instagram.com/p/'+tweet.entities.urls[j].expanded_url.substring(23)+'/embed/" scrolling="no" allowtransparency="true"></iframe>\n';
                           }
+                          if (tweet.entities.urls[j].expanded_url.substring(0,13) == "http://fb.me/") {
+                            embeds += '<iframe name="f2a33898cc" width="500px" height="1000px" frameborder="0" allowtransparency="true" scrolling="no" title="fb:post Facebook Social Plugin" src="https://www.facebook.com/plugins/post.php?app_id=113869198637480&amp;channel=https%3A%2F%2Fs-static.ak.facebook.com%2Fconnect%2Fxd_arbiter%2FwTH8U0osOYl.js%3Fversion%3D40%23cb%3Df29fb9f5a8%26domain%3Ddevelopers.facebook.com%26origin%3Dhttps%253A%252F%252Fdevelopers.facebook.com%252Ff380eee8f8%26relation%3Dparent.parent&amp;href=https%3A%2F%2F'+unshortened+'&amp;locale=en_US&amp;sdk=joey&amp;width=500" class="" style="border: none; visibility: visible; width: 500px; height: 909px;"></iframe>';
+                          }
                         }
                       }
                       if (typeof tweet.entities.user_mentions != 'undefined') {
