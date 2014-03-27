@@ -182,12 +182,14 @@ function jsonToatom(feed, permalink, description, type, key) {
                         for (j = 0; j < tweet.entities.urls.length; j++) {
                           var z = 0;
                           var temp = tweet.entities.urls[j].display_url;
-                          unshortened = UrlFetchApp.fetch(tweet.entities.urls[j].expanded_url, {"followRedirects":false});
-                          unshortened = unshortened.getHeaders();
-                          while (typeof unshortened["Location"] != 'undefined' && z++ < 15) {
-                            temp = unshortened["Location"];
-                            unshortened = UrlFetchApp.fetch(unshortened["Location"], {"followRedirects":false});
+                          if (tweet.entities.urls[j].expanded_url.substring(0,14) == "http://bit.ly/" || tweet.entities.urls[j].expanded_url.substring(0,13) == "http://ow.ly/") {
+                            unshortened = UrlFetchApp.fetch(tweet.entities.urls[j].expanded_url, {"followRedirects":false});
                             unshortened = unshortened.getHeaders();
+                            while (typeof unshortened["Location"] != 'undefined' && z++ < 2) {
+                              temp = unshortened["Location"];
+                              unshortened = UrlFetchApp.fetch(unshortened["Location"], {"followRedirects":false});
+                              unshortened = unshortened.getHeaders();
+                            }
                           }
                           unshortened = temp.replace( new RegExp("[^/]*//",""),"");
                           display_tweet = display_tweet.replace(tweet.entities.urls[j].url, "<a href='"+tweet.entities.urls[j].url+"' title='"+tweet.entities.urls[j].expanded_url+"'>"+unshortened+"</a>");
