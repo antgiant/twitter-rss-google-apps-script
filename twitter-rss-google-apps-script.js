@@ -174,7 +174,7 @@ function jsonToatom(feed, permalink, description, type, key) {
                           var tmp = UrlFetchApp.fetch(tweet.entities.media[j].media_url_https);
                           tmp = tmp.getHeaders();
                           if (typeof tmp["Content-Length"] != 'undefined' && typeof tmp["Content-Type"] != 'undefined') {
-                            enclosures += "<enclosure url='"+tweet.entities.media[j].media_url_https+"' length='"+tmp["Content-Length"]+"' type='"+tmp["Content-Type"]+"'/>\n";
+                            enclosures += "<link rel='enclosure' href='"+tweet.entities.media[j].media_url_https+"' length='"+tmp["Content-Length"]+"' type='"+tmp["Content-Type"]+"'/>\n";
                           }
                         }
                       }
