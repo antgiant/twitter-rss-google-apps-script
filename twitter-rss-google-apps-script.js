@@ -189,6 +189,9 @@ function jsonToatom(feed, permalink, description, type, key) {
                           if (tweet.entities.urls[j].expanded_url.substring(0,16) == "http://youtu.be/") {
                             embeds += '<br>\n<iframe width="560" height="315" src="//www.youtube.com/embed/'+tweet.entities.urls[j].expanded_url.substring(16)+'" frameborder="0" allowfullscreen></iframe>\n';
                           }
+                          if (tweet.entities.urls[j].expanded_url.substring(0,17) == "http://vimeo.com/") {
+                            embeds += '<br>\n<iframe width="500" height="281" src="//player.vimeo.com/video/'+tweet.entities.urls[j].expanded_url.substring(17)+'" frameborder="0"></iframe>\n';
+                          }
                           if (tweet.entities.urls[j].expanded_url.substring(0,23) == "http://instagram.com/p/") {
                             embeds += '<br>\n<iframe width="612" height="710" src="//instagram.com/p/'+tweet.entities.urls[j].expanded_url.substring(23)+'/embed/" scrolling="no" allowtransparency="true"></iframe>\n';
                           }
