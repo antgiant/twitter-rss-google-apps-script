@@ -156,6 +156,7 @@ function jsonToatom(feed, permalink, description, type, key) {
                         var retweets = tweet.retweet_count;
                         var favs = tweet.favorite_count;
                         date = new Date(tweet.created_at);
+                        var enclosures = "";
                         var images = "";
                         var embeds = "";
                         var unshortened = "";
@@ -170,7 +171,11 @@ function jsonToatom(feed, permalink, description, type, key) {
                         for (j = 0; j < tweet.entities.media.length; j++) {
 //                          display_tweet = display_tweet.replace(tweet.entities.media[j].url, "<a href='"+tweet.entities.media[j].expanded_url+"' title='"+tweet.entities.media[j].display_url+"'><img src='"+tweet.entities.media[j].media_url_https+"'></a>");
                           display_tweet = display_tweet.replace(tweet.entities.media[j].url, "<a href='"+tweet.entities.media[j].expanded_url+"'>"+tweet.entities.media[j].display_url+"</a>");
-                          images += "<p><img width='"+tweet.entities.media[j].sizes.medium.w+"' height='"+tweet.entities.media[j].sizes.medium.h+"' src='"+tweet.entities.media[j].media_url_https+"' /></p>\n";
+                          var tmp = UrlFetchApp.fetch(tweet.entities.media[j].media_url_https);
+                          tmp = tmp.getHeaders();
+                          if (typeof tmp["Content-Length"] != 'undefined' && typeof tmp["Content-Type"] != 'undefined') {
+                            enclosures += "<enclosure url='"+tweet.entities.media[j].media_url_https+"' length='"+tmp["Content-Length"]+"' type='"+tmp["Content-Type"]+"'/>\n";
+                          }
                         }
                       }
                       if (typeof tweet.entities.urls != 'undefined') {
@@ -213,6 +218,7 @@ function jsonToatom(feed, permalink, description, type, key) {
                         atom += '      <name>'+sender_name+' (@'+sender+')</name>\n';
                         atom += '      <uri>https://twitter.com/' + sender + '</uri>\n';
                         atom += '    </author>\n';
+                        atom += '    '+enclosures;
                         atom += '    <content type="html">\n';
                         atom += '      <![CDATA[\n';
                         atom += '        <table>\n';
@@ -228,7 +234,6 @@ function jsonToatom(feed, permalink, description, type, key) {
                         atom += "                " + retweets+" Retweets | "+favs+" Favorites</td>\n";
                         atom += "          </tr>\n";
                         atom += "        </table>\n";
-                        atom += "                " + images;
                         atom += "                " + embeds;
                         atom += "      ]]>\n";
                         atom += "    </content>\n";
