@@ -254,19 +254,30 @@ function connectTwitter() {
 function unsortenURL(url, defaultDisplayURL) {
 	//If no default is passed in use URL
 	defaultDisplayURL = typeof defaultDisplayURL !== 'undefined' ? defaultDisplayURL : url;
-	var longURL = defaultDisplayURL;
-	if (url.substring(0,14) == "http://bit.ly/" || url.substring(0,13) == "http://ow.ly/") {
-		var z = 0;
-		var temp = "";
-		temp = UrlFetchApp.fetch(url, {"followRedirects":false});
-		temp = temp.getHeaders();
-		while (typeof temp["Location"] != 'undefined' && z++ < 2) {
-		  longURL = temp["Location"];
-		  temp = UrlFetchApp.fetch(temp["Location"], {"followRedirects":false});
-		  temp = temp.getHeaders();
+
+	//Cache Unshortened URLs for Speed
+	var id = Utilities.base64Encode(url);
+    var cache = CacheService.getPrivateCache();
+    var longURL = cache.get(id);
+
+    if (!temp) {
+		longURL = defaultDisplayURL;
+
+		if (url.substring(0,14) == "http://bit.ly/" || url.substring(0,13) == "http://ow.ly/") {
+			var z = 0;
+			temp = "";
+			temp = UrlFetchApp.fetch(url, {"followRedirects":false});
+			temp = temp.getHeaders();
+			while (typeof temp["Location"] != 'undefined' && z++ < 2) {
+			  longURL = temp["Location"];
+			  temp = UrlFetchApp.fetch(temp["Location"], {"followRedirects":false});
+			  temp = temp.getHeaders();
+			}
 		}
-	}
-	longURL = longURL.replace( new RegExp("[^/]*//",""),"");
+		longURL = longURL.replace( new RegExp("[^/]*//",""),"");
+        cache.put(id, longURL, 21600);
+    }
+
 	return longURL;
 }
 
