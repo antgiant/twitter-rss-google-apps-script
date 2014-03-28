@@ -286,16 +286,18 @@ function unsortenURL(url, defaultDisplayURL) {
 
 function createEmbed(url) {
 	var embeds = "";
-	if (url.substring(0,16) == "http://youtu.be/") {
-		embeds += '<br>\n<iframe width="560" height="315" src="//www.youtube.com/embed/'+url.substring(16)+'" frameborder="0" allowfullscreen></iframe>\n';
+    var domain = url.replace( new RegExp("[^/]*//([^/]*)/.*",""),"$1");
+    var data = url.replace( new RegExp("[^/]*//[^/]*/(.*)",""),"$1");
+	if (domain == "youtu.be") {
+		embeds += '<br>\n<iframe width="560" height="315" src="//www.youtube.com/embed/'+data+'" frameborder="0" allowfullscreen></iframe>\n';
 	}
-	if (url.substring(0,17) == "http://vimeo.com/") {
-		embeds += '<br>\n<iframe width="500" height="281" src="//player.vimeo.com/video/'+url.substring(17)+'" frameborder="0"></iframe>\n';
+	if (domain == "vimeo.com") {
+		embeds += '<br>\n<iframe width="500" height="281" src="//player.vimeo.com/video/'+data+'" frameborder="0"></iframe>\n';
 	}
-	if (url.substring(0,23) == "http://instagram.com/p/") {
-		embeds += '<br>\n<iframe width="612" height="710" src="//instagram.com/p/'+url.substring(23)+'/embed/" scrolling="no" allowtransparency="true"></iframe>\n';
+	if (domain == "instagram.com") {
+		embeds += '<br>\n<iframe width="612" height="710" src="//instagram.com/'+data+'/embed/" scrolling="no" allowtransparency="true"></iframe>\n';
 	}
-	if (url.substring(0,13) == "http://fb.me/") {
+	if (domain == "fb.me") {
 		embeds += '<iframe name="f2a33898cc" width="500px" height="1000px" frameborder="0" allowtransparency="true" scrolling="no" title="fb:post Facebook Social Plugin" src="https://www.facebook.com/plugins/post.php?app_id=113869198637480&amp;channel=https%3A%2F%2Fs-static.ak.facebook.com%2Fconnect%2Fxd_arbiter%2FwTH8U0osOYl.js%3Fversion%3D40%23cb%3Df29fb9f5a8%26domain%3Ddevelopers.facebook.com%26origin%3Dhttps%253A%252F%252Fdevelopers.facebook.com%252Ff380eee8f8%26relation%3Dparent.parent&amp;href=https%3A%2F%2F'+unsortenURL(url)+'&amp;locale=en_US&amp;sdk=joey&amp;width=500" class="" style="border: none; visibility: visible; width: 500px; height: 909px;"></iframe>';
 	}
 	return embeds;
