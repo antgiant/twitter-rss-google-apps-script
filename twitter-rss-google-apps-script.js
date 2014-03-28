@@ -257,19 +257,22 @@ function unsortenURL(url, defaultDisplayURL) {
 
 	//Cache Unshortened URLs for Speed
 	var id = Utilities.base64Encode(url);
-    var cache = CacheService.getPrivateCache();
+    var cache = CacheService.getPublicCache();
     var longURL = cache.get(id);
 
-    if (!temp) {
+    if (!longURL) {
 		longURL = defaultDisplayURL;
 
-		if (url.substring(0,14) == "http://bit.ly/" || url.substring(0,13) == "http://ow.ly/") {
+		//Assume that a link shortner will not use more than half of a tweet
+		if (url.length < 70) {
 			var z = 0;
-			temp = "";
-			temp = UrlFetchApp.fetch(url, {"followRedirects":false});
+			var temp = UrlFetchApp.fetch(url, {"followRedirects":false});
 			temp = temp.getHeaders();
-			while (typeof temp["Location"] != 'undefined' && z++ < 2) {
+			while (typeof temp["Location"] != 'undefined' && z++ < 15) {
 			  longURL = temp["Location"];
+			  if (longURL.length >= 70) {
+				  break;
+			  }
 			  temp = UrlFetchApp.fetch(temp["Location"], {"followRedirects":false});
 			  temp = temp.getHeaders();
 			}
